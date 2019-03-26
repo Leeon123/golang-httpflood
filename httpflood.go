@@ -144,7 +144,7 @@ func flood(i int) {
         return
     }*/
     var url2 = strconv.Itoa(rand.Intn(10000))
-    url := "http//"
+    url := "http://"
     url += ip
     url += ":"
     url += port
