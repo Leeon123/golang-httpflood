@@ -6,6 +6,9 @@ Using Golang(net/socket) to httpflood
 **Using tcp socket to send Http request**
 
 ## Download
+Please download the F***ing golang at first.
+
+Then:
 
     git clone https://github.com/Leeon123/golang-httpflood.git
 
