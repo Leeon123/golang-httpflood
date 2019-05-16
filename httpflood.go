@@ -1,3 +1,7 @@
+/*
+Coded by LeeOn123
+Please fking code ur script by ur self, kid. 
+*/
 package main
 
 import (
