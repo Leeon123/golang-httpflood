@@ -1,12 +1,22 @@
-# Golang-httpflood (Beta) ![](https://img.shields.io/badge/Version-0.5-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
+# Golang-httpflood ![](https://img.shields.io/badge/Version-1.2-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
-
-**Now can flood a low setting cloudflare website :)**
 
 **Using tcp socket to send Http request**
 
+## INFO
+
+ - [x] HTTP Get Flood
+ - [x] HTTP Post Flood
+ - [x] Random url(http get flood)
+ - [x] Self edit header(You can use "nil" to use default header)
+ -----------------------------------------------------
+ Default header setting:
+ - [x] Random user-agents
+ - [x] Random data(http post flood) 
+ - [x] Accept: */*
+
 ## Download
-Please download the F***ing golang at first.
+***Please download the F\*cking golang at first.***
 
 Then:
 
