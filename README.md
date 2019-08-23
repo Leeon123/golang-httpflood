@@ -3,6 +3,12 @@ Using Golang(net/socket) to httpflood
 
 **Using tcp socket to send Http request**
 
+**1 Threads =  1 connection, Normal website about using 300-1000 connections will down in 10s(specially apache server LOL)**
+ 
+**This is golang and threads are just goroutines so you set more higher threads like 1000-5000 is fine.**
+
+**Why can it run over 1000 threads(goroutines)? [Read this](http://tleyden.github.io/blog/2014/10/30/goroutines-vs-threads/)**
+
 ## INFO
 
  - [x] HTTP Get Flood
