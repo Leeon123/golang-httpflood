@@ -219,16 +219,16 @@ func flood() {
 }
 
 func main() {
+	fmt.Println("\r\n'||  ||`   ||      ||                '||''''| '||`                   ||` ")
+	fmt.Println(" ||  ||    ||      ||                 ||  .    ||                    ||  ")
+	fmt.Println(" ||''||  ''||''  ''||''  '||''|, ---  ||''|    ||  .|''|, .|''|, .|''||  ")
+	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
+	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
+	fmt.Println("                          ||                                             ")
+	fmt.Println("                         .||                     Golang version 1.2      ")
+	fmt.Println("                                                        C0d3d By L330n123")
+	fmt.Println("==========================================================================")
 	if len(os.Args) != 8 {
-		fmt.Println("\r\n'||  ||`   ||      ||                '||''''| '||`                   ||` ")
-		fmt.Println(" ||  ||    ||      ||                 ||  .    ||                    ||  ")
-		fmt.Println(" ||''||  ''||''  ''||''  '||''|, ---  ||''|    ||  .|''|, .|''|, .|''||  ")
-		fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
-		fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
-		fmt.Println("                          ||                                             ")
-		fmt.Println("                         .||                     Golang version 1.2      ")
-		fmt.Println("                                                        C0d3d By L330n123")
-		fmt.Println("==========================================================================")
 		fmt.Println("Post Mode will use header.txt as data")
 		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>")
 		os.Exit(1)
