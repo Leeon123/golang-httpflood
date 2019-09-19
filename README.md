@@ -1,4 +1,4 @@
-# Golang-httpflood ![](https://img.shields.io/badge/Version-1.2-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
+# Golang-httpflood ![](https://img.shields.io/badge/Version-1.5-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
 
 **Using tcp socket to send Http request**
@@ -15,6 +15,8 @@ Using Golang(net/socket) to httpflood
  - [x] HTTP Post Flood
  - [x] Random url(http get flood)
  - [x] Self edit header(You can use "nil" to use default header)
+ - [x] Improved threading control
+ - [x] More powerful flood
  -----------------------------------------------------
  Default header setting:
  - [x] Random user-agents
