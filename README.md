@@ -1,7 +1,9 @@
 # Golang-httpflood ![](https://img.shields.io/badge/Version-1.5-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
 
-**Using tcp socket to send Http request**
+**Warning: Please use command "ulimit -n 999999" before use this in linux**
+
+Using tcp socket to send Http request
 
 **1 Threads =  1 connection, Normal website about using 300-1000 connections will down in 10s(specially apache server LOL)**
  
