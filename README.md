@@ -1,4 +1,4 @@
-# Golang-httpflood ![](https://img.shields.io/badge/Version-1.5-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
+# Golang-httpflood ![](https://img.shields.io/badge/Version-1.6-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
 
 **Warning: Please use command "ulimit -n 999999" before use this in linux**
@@ -23,7 +23,7 @@ Using tcp socket to send Http request
  Default header setting:
  - [x] Random user-agents
  - [x] Random data(http post flood) 
- - [x] Accept: */*
+ - [x] Random Accpet
 
 ## Download
 ***Please download the F\*cking golang at first.***
