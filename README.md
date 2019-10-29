@@ -19,11 +19,13 @@ Using tcp socket to send Http request
  - [x] Self edit header(You can use "nil" to use default header)
  - [x] Improved threading control
  - [x] More powerful flood
+ - [x] Support for IP and host
+ - [x] Improved ssl handler
  -----------------------------------------------------
  Default header setting:
  - [x] Random user-agents
  - [x] Random data(http post flood) 
- - [x] Random Accpet
+ - [x] Random Accept
 
 ## Download
 ***Please download the F\*cking golang at first.***
@@ -43,4 +45,4 @@ Or anything else of http header. If you don't have any idea of this please just 
 
     cd golang-httpflood
     go build httpflood.go
-    ./httpflood  <ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>
+    ./httpflood  <ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil> <domain/nil>
