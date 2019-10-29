@@ -19,7 +19,7 @@ Using tcp socket to send Http request
  - [x] Self edit header(You can use "nil" to use default header)
  - [x] Improved threading control
  - [x] More powerful flood
- - [x] Support for IP and host
+ - [x] Support for IP and domain
  - [x] Improved ssl handler
  -----------------------------------------------------
  Default header setting:

@@ -257,7 +257,7 @@ func flood() {
 func main() {
 	if len(os.Args) != 9 {
 		fmt.Println("Post Mode will use header.txt as data")
-		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil> <domain/nil>")
+		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil> <domain/nil>") 
 		os.Exit(1)
 	}
 	var threads, _ = strconv.Atoi(os.Args[3])
