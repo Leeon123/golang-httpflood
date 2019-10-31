@@ -43,4 +43,4 @@ Or anything else of http header. If you don't have any idea of this please just 
 
     cd golang-httpflood
     go build httpflood.go
-    ./httpflood  <ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>
+    ./httpflood  <host/ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>
