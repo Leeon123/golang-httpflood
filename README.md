@@ -38,6 +38,8 @@ The release will not have any function, just send simple http request through so
 
 You can copy this source's fucntion to that source.
 
+Base: https://github.com/Leeon123/Golang_CC_Base
+
 ## Download
 ***Please download the F\*cking golang at first.***
 
