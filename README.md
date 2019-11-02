@@ -19,6 +19,7 @@ Using Golang(net/socket) to httpflood
  - [x] More powerful flood
  - [x] Auto get ip form domain(golang inbuilt function)
  - [x] More format for random url(http get flood)
+ - [x] Fixed for 386 systems
  -----------------------------------------------------
  Default header setting:
  - [x] Random user-agents
