@@ -33,7 +33,7 @@ down lots of site. But I'll not release my version,  becuase it's little dangero
 
 I used it to take down some gov website so i need to change the random url format( LOL)
 
-The release will not have any function, just send simple http requestthrough socks5 with socket
+The release will not have any function, just send simple http request through socks5 with socket
 
 You can copy this source's fucntion to that source.
 
