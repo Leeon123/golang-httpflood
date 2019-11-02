@@ -1,9 +1,7 @@
-# Golang-httpflood ![](https://img.shields.io/badge/Version-1.6-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
+# Golang-httpflood ![](https://img.shields.io/badge/Version-1.7-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
 
 **Warning: Please use command "ulimit -n 999999" before use this in linux**
-
-Using tcp socket to send Http request
 
 **1 Threads =  1 connection, Normal website about using 300-1000 connections will down in 10s(specially apache server LOL)**
  
@@ -19,11 +17,25 @@ Using tcp socket to send Http request
  - [x] Self edit header(You can use "nil" to use default header)
  - [x] Improved threading control
  - [x] More powerful flood
+ - [x] Auto get ip form domain(golang inbuilt function)
+ - [x] More format for random url(http get flood)
  -----------------------------------------------------
  Default header setting:
  - [x] Random user-agents
  - [x] Random data(http post flood) 
  - [x] Random Accpet
+
+## Sth need to talk
+
+I'll update a socks5 httpflood(golang) base later, I'h already done with that project and
+
+down lots of site. But I'll not release my version,  becuase it's little dangerous.
+
+I used it to take down some gov website so i need to change the random url format( LOL)
+
+The release will not have any function, just send simple http requestthrough socks5 with socket
+
+You can copy this source's fucntion to that source.
 
 ## Download
 ***Please download the F\*cking golang at first.***
