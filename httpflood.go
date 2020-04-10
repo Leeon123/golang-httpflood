@@ -202,6 +202,8 @@ func flood() {
 		if os.Args[2] == "443" {
 			cfg := &tls.Config{
 				InsecureSkipVerify: true,
+				ServerName: os.Args[1],//simple fix
+			}
 			}
 			s, err = tls.Dial("tcp", addr, cfg)
 		} else {
