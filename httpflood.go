@@ -204,7 +204,6 @@ func flood() {
 				InsecureSkipVerify: true,
 				ServerName: os.Args[1],//simple fix
 			}
-			}
 			s, err = tls.Dial("tcp", addr, cfg)
 		} else {
 			s, err = net.Dial("tcp", addr)
