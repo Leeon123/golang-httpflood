@@ -26,19 +26,6 @@ Using Golang(net/socket) to httpflood
  - [x] Random data(http post flood) 
  - [x] Random Accpet
 
-## Sth need to talk
-
-I'll update a socks5 httpflood(golang) base later, I'h already done with that project and
-
-down lots of site. But I'll not release my version,  becuase it's little dangerous.
-
-I used it to take down some gov website so i need to change the random url format( LOL)
-
-The release will not have any function, just send simple http request through socks5 with socket
-
-You can copy this source's fucntion to that source.
-
-Base: https://github.com/Leeon123/Golang_CC_Base
 
 ## Download
 ***Please download the F\*cking golang at first.***
