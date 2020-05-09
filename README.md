@@ -1,4 +1,4 @@
-# Golang-httpflood ![](https://img.shields.io/badge/Version-1.7-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
+# Golang-httpflood ![](https://img.shields.io/badge/Version-1.8-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
 
 **Warning: Please use command "ulimit -n 999999" before use this in linux**
