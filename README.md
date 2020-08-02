@@ -3,7 +3,7 @@ Using Golang(net/socket) to httpflood
 
 **Warning: Please use command "ulimit -n 999999" before use this in linux**
 
-**1 Threads =  1 connection, Normal website about using 100~300 connections will down in 10s(specially apache server LOL)**
+**1 Threads =  1 connection, 100~300 connections can down a normal website in 10s(specially apache server LOL)**
  
 **This is golang and threads are just goroutines so you set more higher threads like 1000-5000 is fine.**
 
