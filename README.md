@@ -1,9 +1,9 @@
-# Golang-httpflood ![](https://img.shields.io/badge/Version-1.8-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
+# Golang-httpflood ![](https://img.shields.io/badge/Version-1.9-brightgreen.svg) ![](https://img.shields.io/badge/license-MIT-blue.svg)
 Using Golang(net/socket) to httpflood
 
 **Warning: Please use command "ulimit -n 999999" before use this in linux**
 
-**1 Threads =  1 connection, Normal website about using 300-1000 connections will down in 10s(specially apache server LOL)**
+**1 Threads =  1 connection, Normal website about using 100~300 connections will down in 10s(specially apache server LOL)**
  
 **This is golang and threads are just goroutines so you set more higher threads like 1000-5000 is fine.**
 
@@ -24,7 +24,8 @@ Using Golang(net/socket) to httpflood
  Default header setting:
  - [x] Random user-agents
  - [x] Random data(http post flood) 
- - [x] Random Accpet
+ - [x] Random Accpetall
+ - [x] Random Referer(only for http get flood)
 
 
 ## Download
@@ -40,7 +41,7 @@ Header.txt format:
     User-agent: Wget
     Referer: http://google.com
 
-Or anything else of http header. If you don't have any idea of this please just use nil for using default random header.
+Or anything else of http header. If you don't have any idea of this please just use "nil" for using default random header.
 ## Usage
 
     cd golang-httpflood
