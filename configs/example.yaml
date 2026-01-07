@@ -1,0 +1,10 @@
+# Example configuration for golang-httpflood
+# Copy this file and modify as needed
+
+url: "https://target.example.com"
+threads: 500
+duration: 120
+mode: "get"
+header_file: "configs/headers/custom.txt"
+requests_per_connection: 100
+random_chars: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
