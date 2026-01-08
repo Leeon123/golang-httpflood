@@ -1,0 +1,9 @@
+# GET flood configuration example
+
+url: "https://target.example.com"
+threads: 300
+duration: 180
+mode: "get"
+header_file: "nil"
+requests_per_connection: 100
+random_chars: "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"

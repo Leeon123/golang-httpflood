@@ -1,0 +1,9 @@
+# POST flood configuration example
+
+url: "https://target.example.com"
+threads: 200
+duration: 120
+mode: "post"
+header_file: "configs/headers/custom.txt"
+requests_per_connection: 100
+random_chars: "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"

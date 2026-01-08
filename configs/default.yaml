@@ -1,0 +1,22 @@
+# Default configuration for golang-httpflood
+
+# Target URL
+url: "https://example.com"
+
+# Number of concurrent threads (goroutines)
+threads: 100
+
+# Flood duration in seconds
+duration: 60
+
+# HTTP mode: "get" or "post"
+mode: "get"
+
+# Custom header file path (use "nil" for default headers)
+header_file: "nil"
+
+# Number of requests per connection
+requests_per_connection: 100
+
+# Random characters for URL parameter generation
+random_chars: "asdfghjklqwertyuiopzxcvbnmASDFGHJKLQWERTYUIOPZXCVBNM"
